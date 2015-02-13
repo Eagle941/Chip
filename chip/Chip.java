@@ -1,5 +1,6 @@
 package chip;
 import static chip.ChargingCurve.chargingcurve;
+import static chip.Discharging.dischargingcurve;
 import static chip.Tolerances.highervalue;
 import static chip.Tolerances.lowervalue;
 import static java.lang.Math.E;
@@ -124,7 +125,7 @@ public class Chip{
         BigDecimal captol = new BigDecimal(10.0, MathContext.DECIMAL64);
         
         //R16 == Rt
-        BigDecimal r16n = resistors[0];
+        BigDecimal r16n = resistors[45];
         BigDecimal r16l = lowervalue(restol,r16n);
         BigDecimal r16h = highervalue(restol,r16n);
         BigDecimal[] r16 = {r16n,r16l,r16h};
@@ -132,7 +133,7 @@ public class Chip{
         //System.out.println(r16n + " " + r16l + " " + r16h);
         
         //C4 == Ct
-        BigDecimal c4n = capacitors[0];
+        BigDecimal c4n = capacitors[23];
         BigDecimal c4l = lowervalue(captol,c4n);
         BigDecimal c4h = highervalue(captol,c4n);
         BigDecimal[] c4= {c4n,c4l,c4h};
@@ -191,7 +192,8 @@ public class Chip{
         BigDecimal[] v1t1 = {v1t1nom,v1t1low,v1t1high};
         
         //System.out.println(v1t1nom);
-        System.out.println("The resistance R17 is " + r17[0] + "\n" + "The capacitor C5 is " + c5[0] + "\n" + "The current Is is " + is[0]);
-        chargingcurve(is,r17,c5,vts);
+        System.out.println("The resistance R17 is " + r17[0] + "\n" + "The capacitor C5 is " + c5[0] + "\n" + "The current Is is " + is[0] + "\n" + "The resistance R16 is " + r16[0] + "\n" + "The capacitor C4 is " + c4[0]);
+        //chargingcurve(is,r17,c5,vts);
+        dischargingcurve(r17,c5,is,t1);
     }   
 }
