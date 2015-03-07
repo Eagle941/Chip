@@ -44,7 +44,7 @@ public class Discharging {
         BigDecimal[] flow = new BigDecimal[12];
         BigDecimal[] fhigh = new BigDecimal[12];
         
-        System.out.println("  t       Nom V1(t1)        Nom t2         Nom T             Nom F           Min V1(t1)        Min t2          Min T             Min F           Max V1(t1)        Max t2          Max T             Max F");
+        //System.out.println("  Vts     Nom V1(t1)        Nom t2         Nom T             Nom F           Min V1(t1)        Min t2          Min T             Min F           Max V1(t1)        Max t2          Max T             Max F");
         for(int i=0; i<vts.length; i++){
             
             //V1(t1) calculations
@@ -67,7 +67,7 @@ public class Discharging {
             flow[i] = new BigDecimal(1.0/tlow[i].doubleValue());
             fhigh[i] = new BigDecimal(1.0/thigh[i].doubleValue());
             
-            System.out.format("%.1fs" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "\n", vts[i].doubleValue(), v1t1nom[i].doubleValue(), t2nom[i].doubleValue(), tnom[i].doubleValue(), fnom[i].doubleValue(), v1t1low[i].doubleValue(), t2low[i].doubleValue(), tlow[i].doubleValue(), flow[i].doubleValue(), v1t1high[i].doubleValue(), t2high[i].doubleValue(), thigh[i].doubleValue(), fhigh[i].doubleValue());
+            //System.out.format("%.1fs" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "\n", vts[i].doubleValue(), v1t1nom[i].doubleValue(), t2nom[i].doubleValue(), tnom[i].doubleValue(), fnom[i].doubleValue(), v1t1low[i].doubleValue(), t2low[i].doubleValue(), tlow[i].doubleValue(), flow[i].doubleValue(), v1t1high[i].doubleValue(), t2high[i].doubleValue(), thigh[i].doubleValue(), fhigh[i].doubleValue());
         }
     }
 }

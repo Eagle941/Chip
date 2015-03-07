@@ -124,34 +124,36 @@ public class Chip{
         BigDecimal restol = new BigDecimal(1.0,MathContext.DECIMAL64);
         BigDecimal captol = new BigDecimal(10.0, MathContext.DECIMAL64);
         
-        //R16 == Rt
-        BigDecimal r16n = resistors[45];
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        //System.out.println(r16n + " " + r16l + " " + r16h);
+
+        //R16 == Rt 45
+        BigDecimal r16n = resistors[0];
         BigDecimal r16l = lowervalue(restol,r16n);
         BigDecimal r16h = highervalue(restol,r16n);
         BigDecimal[] r16 = {r16n,r16l,r16h};
         
-        //System.out.println(r16n + " " + r16l + " " + r16h);
-        
-        //C4 == Ct
-        BigDecimal c4n = capacitors[23];
+        //C4 == Ct 23
+        BigDecimal c4n = capacitors[0];
         BigDecimal c4l = lowervalue(captol,c4n);
         BigDecimal c4h = highervalue(captol,c4n);
         BigDecimal[] c4= {c4n,c4l,c4h};
         
-        //R14 == Rs
-        BigDecimal r14n = resistors[50];
+        //R14 == Rs 50
+        BigDecimal r14n = resistors[0];
         BigDecimal r14l = lowervalue(restol,r14n);
         BigDecimal r14h = highervalue(restol,r14n);
         BigDecimal[] r14= {r14n,r14l,r14h};
         
-        //R17 == Rl
-        BigDecimal r17n = resistors[55];
+        //R17 == Rl 55
+        BigDecimal r17n = resistors[0];
         BigDecimal r17l = lowervalue(restol,r17n);
         BigDecimal r17h = highervalue(restol,r17n);
         BigDecimal[] r17= {r17n,r17l,r17h};
         
-        //C5 == Cl
-        BigDecimal c5n = capacitors[20];
+        //C5 == Cl 20
+        BigDecimal c5n = capacitors[0];
         BigDecimal c5l = lowervalue(captol,c5n);
         BigDecimal c5h = highervalue(captol,c5n);
         BigDecimal[] c5= {c5n,c5l,c5h};
@@ -183,7 +185,7 @@ public class Chip{
         //System.out.println(r14n + " " + isnom + " " + " " + islow + " " + ishigh);
         
         //Vts
-        BigDecimal vts = new BigDecimal(1.6, MathContext.DECIMAL64);
+        double vts = 0.0; 
         
         //V1(t1)
         BigDecimal v1t1nom = new BigDecimal(r17[0].doubleValue()*is[0].doubleValue()-(r17[0].doubleValue()*is[0].doubleValue())*pow(E,-t1[0].doubleValue()/(r17[0].doubleValue()*c5[0].doubleValue())));
@@ -192,8 +194,60 @@ public class Chip{
         BigDecimal[] v1t1 = {v1t1nom,v1t1low,v1t1high};
         
         //System.out.println(v1t1nom);
-        System.out.println("The resistance R17 is " + r17[0] + "\n" + "The capacitor C5 is " + c5[0] + "\n" + "The current Is is " + is[0] + "\n" + "The resistance R16 is " + r16[0] + "\n" + "The capacitor C4 is " + c4[0]);
         //chargingcurve(is,r17,c5,vts);
-        dischargingcurve(r17,c5,is,t1);
+        //dischargingcurve(r17,c5,is,t1);
+        //System.out.println("The resistance R17 is " + r17[0] + "\n" + "The capacitor C5 is " + c5[0] + "\n" + "The current Is is " + is[0] + "\n" + "The resistance R16 is " + r16[0] + "\n" + "The capacitor C4 is " + c4[0]);
+        
+        //Contator
+        int contcharge = 0;
+        int contv1t1 = 0;
+        int comb = 0;
+        
+        for(int a=0; a<resistors.length;a++){            
+            for(int b=0; b<capacitors.length;b++){
+                for(int c=0; c<resistors.length;c++){
+                    for(int d=0; d<resistors.length;d++){
+                        for(int e=0; e<capacitors.length;e++){
+                            
+                            //Assigned values
+                            r16n=resistors[a];
+                            c4n=capacitors[b];
+                            r14n=resistors[c];
+                            r17n=resistors[d];
+                            c5n=capacitors[e];
+
+                            //v1t list
+                            BigDecimal[][] charge = chargingcurve(is,r17,c5,vts);
+                            comb++;
+                            System.out.println(comb);
+                            
+                            if(t1nom.doubleValue()>(0.000316) & t1low.doubleValue()>(0.000316) & t1high.doubleValue()>(0.000316)){
+                                vts=0.5;
+                                for(int f0=0; f0<charge.length; f0++){
+                                    for(int f1=0; f1<charge[f0].length; f1++){
+                                        if(charge[f0][f1].doubleValue()<4.6){
+                                            contcharge++;
+                                            if(contcharge == 60){
+                                                for(int g=0; g<v1t1.length; g++){
+                                                    if(v1t1[g].doubleValue()<4.6 & v1t1[g].doubleValue()>vts){
+                                                        contv1t1++;
+                                                        if(contv1t1==3){
+                                                            System.out.format("R16: %.1f | C4: %.1fpF | R14: %.1f | R17: %.1f | C5: %.1fpF" + "\n",r16n,c4n.multiply(new BigDecimal(Math.pow(10.0, 12))),r14n,r17n,c5n.multiply(new BigDecimal(Math.pow(10.0, 12))));
+                                                            contcharge=0;
+                                                            contv1t1=0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }   
 }
