@@ -200,8 +200,20 @@ public class Chip{
         
         //Contator
         int contcharge = 0;
-        int contv1t1 = 0;
+        int contv1t1c = 0;
         int comb = 0;
+        int contv1t1d = 0;
+        int contt2 = 0;
+        int contf = 0;
+        
+        
+        //Vts
+        BigDecimal[] time = new BigDecimal[12];
+        double advance = 0.5;
+        for(int i = 0; i<time.length; i++){
+            time[i] = new BigDecimal(advance,MathContext.DECIMAL64);
+            advance += 0.1;
+        }
         
         for(int a=0; a<resistors.length;a++){            
             for(int b=0; b<capacitors.length;b++){
@@ -218,6 +230,7 @@ public class Chip{
 
                             //v1t list
                             BigDecimal[][] charge = chargingcurve(is,r17,c5,vts);
+                            BigDecimal[][][] discharge = dischargingcurve(r17,c5,is,t1);
                             comb++;
                             System.out.println(comb);
                             
@@ -230,11 +243,44 @@ public class Chip{
                                             if(contcharge == 60){
                                                 for(int g=0; g<v1t1.length; g++){
                                                     if(v1t1[g].doubleValue()<4.6 & v1t1[g].doubleValue()>vts){
-                                                        contv1t1++;
-                                                        if(contv1t1==3){
-                                                            System.out.format("R16: %.1f | C4: %.1fpF | R14: %.1f | R17: %.1f | C5: %.1fpF" + "\n",r16n,c4n.multiply(new BigDecimal(Math.pow(10.0, 12))),r14n,r17n,c5n.multiply(new BigDecimal(Math.pow(10.0, 12))));
-                                                            contcharge=0;
-                                                            contv1t1=0;
+                                                        contv1t1c++;
+                                                        if(contv1t1c==3){
+                                                            //3
+                                                            for(int h=0; h<discharge.length;h++){
+                                                                //3
+                                                                for(int i=0; i<discharge[h].length;i++){
+                                                                    //12
+                                                                    for(int l=0; l<discharge[h][l].length;l++){
+                                                                        //v1t1
+                                                                        if(h==0){
+                                                                            if(discharge[h][i][l].doubleValue()<4.6 & discharge[h][i][l].doubleValue()>time[l].doubleValue()){
+                                                                                contv1t1d++;
+                                                                            }
+                                                                        }
+                                                                        //t2
+                                                                        else if(h==1){
+                                                                            if(discharge[h][i][l].doubleValue()>0.000263){
+                                                                                contt2++;
+                                                                            }
+                                                                        }
+                                                                        //f
+                                                                        else if(h==2){
+                                                                            if(discharge[h][i][l].doubleValue()<1727 & discharge[h][i][l].doubleValue()>512){
+                                                                                contf++;
+                                                                            }
+                                                                        }
+                                                                        else if(contv1t1d==36 & contt2==36 & contf==36){
+                                                                            System.out.format("R16: %.1f | C4: %.1fpF | R14: %.1f | R17: %.1f | C5: %.1fpF" + "\n",r16n,c4n.multiply(new BigDecimal(Math.pow(10.0, 12))),r14n,r17n,c5n.multiply(new BigDecimal(Math.pow(10.0, 12))));
+                                                                            contcharge = 0;
+                                                                            contv1t1c = 0;
+                                                                            comb = 0;
+                                                                            contv1t1d = 0;
+                                                                            contt2 = 0;
+                                                                            contf = 0;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }

@@ -8,7 +8,7 @@ import java.math.MathContext;
 
 public class Discharging {
     
-    public static void dischargingcurve(BigDecimal[] r17, BigDecimal[] c5, BigDecimal[] is, BigDecimal[] t1){
+    public static BigDecimal[][][] dischargingcurve(BigDecimal[] r17, BigDecimal[] c5, BigDecimal[] is, BigDecimal[] t1){
         
         //Vts
         BigDecimal[] vts = new BigDecimal[12];
@@ -28,21 +28,25 @@ public class Discharging {
         BigDecimal[] v1t1nom = new BigDecimal[12];
         BigDecimal[] v1t1low = new BigDecimal[12];
         BigDecimal[] v1t1high = new BigDecimal[12];
+        BigDecimal[][] v1t1 = {v1t1nom,v1t1low,v1t1high};
         
         //t2 lists
         BigDecimal[] t2nom = new BigDecimal[12];
         BigDecimal[] t2low = new BigDecimal[12];
         BigDecimal[] t2high = new BigDecimal[12];
+        BigDecimal[][] t2 = {t2nom,t2low,t2high};
         
         //T lists
         BigDecimal[] tnom = new BigDecimal[12];
         BigDecimal[] tlow = new BigDecimal[12];
         BigDecimal[] thigh = new BigDecimal[12];
+        BigDecimal[][] t = {tnom,tlow,thigh};
         
         //F lists
         BigDecimal[] fnom = new BigDecimal[12];
         BigDecimal[] flow = new BigDecimal[12];
         BigDecimal[] fhigh = new BigDecimal[12];
+        BigDecimal[][] f = {fnom,flow,fhigh};
         
         //System.out.println("  Vts     Nom V1(t1)        Nom t2         Nom T             Nom F           Min V1(t1)        Min t2          Min T             Min F           Max V1(t1)        Max t2          Max T             Max F");
         for(int i=0; i<vts.length; i++){
@@ -51,7 +55,7 @@ public class Discharging {
             v1t1nom[i] = new BigDecimal(r17[0].doubleValue()*is[0].doubleValue()-(r17[0].doubleValue()*is[0].doubleValue()-vts[i].doubleValue())*pow(E,-t1[0].doubleValue()/tau[0].doubleValue()));
             v1t1low[i] = new BigDecimal(r17[1].doubleValue()*is[1].doubleValue()-(r17[1].doubleValue()*is[1].doubleValue()-vts[i].doubleValue())*pow(E,-t1[1].doubleValue()/tau[1].doubleValue()));
             v1t1high[i] = new BigDecimal(r17[2].doubleValue()*is[2].doubleValue()-(r17[2].doubleValue()*is[2].doubleValue()-vts[i].doubleValue())*pow(E,-t1[2].doubleValue()/tau[2].doubleValue()));
-            
+                        
             //t2 calculations
             t2nom[i] = new BigDecimal(tau[0].doubleValue()*log(v1t1nom[i].doubleValue()/vts[i].doubleValue()));
             t2low[i] = new BigDecimal(tau[1].doubleValue()*log(v1t1low[i].doubleValue()/vts[i].doubleValue()));
@@ -69,5 +73,9 @@ public class Discharging {
             
             //System.out.format("%.1fs" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "   " + "%.10fV" + "   " + "%.10fs" + "   " + "%.10fs" + "   " + "%.11fHz" + "\n", vts[i].doubleValue(), v1t1nom[i].doubleValue(), t2nom[i].doubleValue(), tnom[i].doubleValue(), fnom[i].doubleValue(), v1t1low[i].doubleValue(), t2low[i].doubleValue(), tlow[i].doubleValue(), flow[i].doubleValue(), v1t1high[i].doubleValue(), t2high[i].doubleValue(), thigh[i].doubleValue(), fhigh[i].doubleValue());
         }
+        
+        BigDecimal[][][] discharge = {v1t1,t2,f};
+        
+        return discharge;
     }
 }
